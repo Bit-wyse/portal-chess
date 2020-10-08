@@ -1,0 +1,721 @@
+<h1>Master Puzzle Listing</h1>
+
+<%= link_to 'New puzzle', new_puzzle_path %><br>
+<%= link_to 'Random puzzle', puzzles_path(random_puzzle) %>
+
+<button onclick="mctsWork()">Start Generator</button>
+<button onclick="mctsStop()">Stop Generator</button>
+
+<script id="worker1" type="javascript/worker">
+  var obstacleID = 9;
+  var boxID = 1;
+  var goalID = 3;
+  var charID = 2;
+  var freeID = 0;
+  var goalBoxID = 4;
+  var goalCharID = 5;
+
+  class MctsTree {
+    constructor(arr, m, n, type) {
+      this.arr = arr;
+      this.m = m;
+      this.n = n;
+      this.type = type;
+
+      this.actFreeze = "f";
+      this.actTerminate = "t";
+      this.actRight = "r";
+      this.actUp = "u";
+      this.actLeft = "l";
+      this.actDown = "d";
+      this.actBox = "b";
+      this.actObstacle = "o";
+    }
+  }
+
+
+  class VisitTree extends MctsTree {
+    constructor(arr, m = 5, n = 5, type = "v") {
+      super(arr, m, n, type);
+      var state = Array.from({ length: this.m}, () => Array.from({length: this.n}, () => obstacleID));
+      state[Math.trunc(this.m / 2)][Math.trunc(this.n / 2)] = charID;
+
+      this.root = new VisitedNode(this, null, [], state);
+      this.bestNode = this.root;
+      this.bestScore = 0;
+    }
+
+    run(threshold) {
+      while (this.bestScore < threshold) {
+        var node = this.root.select();
+        if (node.terminal === true) {
+          node.simulate();
+        } else {
+          node.expand();
+        }
+        //if (Math.random() < 0.00005) console.log(this.arr);
+      }
+      return bestNode;
+    }
+
+    update(node, score) {
+      if (score > this.bestScore) {
+        this.bestScore = score;
+        this.bestNode = node;
+        postMessage(this.bestNode);
+        console.log("Score:", this.bestScore);
+      }
+    }
+
+  }
+
+
+  class UnvisitTree extends MctsTree {
+    constructor(arr, m = 5, n = 5, type = "u", state) {
+      super(arr, m, n, type);
+      this.root = new UnvisitedNode(this, null, [], state);
+    }
+  }
+
+
+  class MctsNode {
+    constructor(tree, par, children, state, frozen, terminal, untried) {
+      this.tree = tree;
+      this.par = par;
+      this.children = children;
+      this.state = state;
+      this.frozen = frozen;
+      this.terminal = terminal;
+      this.untried = untried;
+      this.index = this.tree.arr.length;
+      this.tree.arr.push(this);
+      if (this.parent() !== null) this.parent().children.push(this.index);
+      if (this.terminal === false) this.populate();
+    }
+
+    parent() {
+      if (this.par === null) {
+        return null;
+      } else {
+        return this.tree.arr[this.par];
+      }
+    }
+
+    child(ind = 0) {
+      return this.tree.arr[this.children[ind]];
+    }
+
+    populate() {
+      var neighbor = 0;
+      var neighbor2 = 0;
+
+      if (this.frozen === false) {
+        for (var i = 0; i < this.state.length; i++) {
+          for (var j = 0; j < this.state[i].length; j++) {
+            if (this.state[i][j] === obstacleID) {
+              var deleted = false;
+
+              neighbor = j + 1;
+              if (deleted === false && neighbor < this.state[i].length) {
+                if (this.state[i][neighbor] === freeID
+                || this.state[i][neighbor] === charID
+                || this.state[i][neighbor] === boxID) {
+                  this.untried.push(this.tree.actObstacle.concat("|", i.toString(), "|", j.toString()));
+                  deleted = true;
+                }
+              }
+
+              neighbor = i + 1;
+              if (deleted === false && neighbor < this.state.length) {
+                if (this.state[neighbor][j] === freeID
+                || this.state[neighbor][j] === charID
+                || this.state[neighbor][j] === boxID) {
+                  this.untried.push(this.tree.actObstacle.concat("|", i.toString(), "|", j.toString()));
+                  deleted = true;
+                }
+              }
+
+              neighbor = j - 1;
+              if (deleted === false && neighbor >= 0) {
+                if (this.state[i][neighbor] === freeID
+                || this.state[i][neighbor] === charID
+                || this.state[i][neighbor] === boxID) {
+                  this.untried.push(this.tree.actObstacle.concat("|", i.toString(), "|", j.toString()));
+                  deleted = true;
+                }
+              }
+
+              neighbor = i - 1;
+              if (deleted === false && neighbor >= 0) {
+                if (this.state[neighbor][j] === freeID
+                || this.state[neighbor][j] === charID
+                || this.state[neighbor][j] === boxID) {
+                  this.untried.push(this.tree.actObstacle.concat("|", i.toString(), "|", j.toString()));
+                  deleted = true;
+                }
+              }
+
+            }
+
+            if (this.state[i][j] === freeID) {
+              this.untried.push(this.tree.actBox.concat("|", i.toString(), "|", j.toString()));
+            }
+          }
+        }
+
+        this.untried.push(this.tree.actFreeze);
+
+      } else {
+        for (i = 0; i < this.state.length; i++) {
+          for (j = 0; j < this.state[i].length; j++) {
+            if (this.state[i][j] === charID || this.state[i][j] === goalCharID) {
+
+              neighbor = j + 1;
+              neighbor2 = j + 2;
+              if (neighbor < this.state[i].length) {
+                switch(this.state[i][neighbor]) {
+                  case freeID:
+                  case goalID:
+                    this.untried.push(this.tree.actRight);
+                    break;
+                  case boxID:
+                  case goalBoxID:
+                    if (neighbor2 < this.state[i].length) {
+                      if (this.state[i][neighbor2] != obstacleID
+                      && this.state[i][neighbor2] != boxID
+                      && this.state[i][neighbor2] != goalBoxID) {
+                        this.untried.push(this.tree.actRight);
+                      }
+                    }
+                    break;
+                }
+              }
+
+              neighbor = i + 1;
+              neighbor2 = i + 2;
+              if (neighbor < this.state.length) {
+                switch(this.state[neighbor][j]) {
+                  case freeID:
+                  case goalID:
+                    this.untried.push(this.tree.actUp);
+                    break;
+                  case boxID:
+                  case goalBoxID:
+                    if (neighbor2 < this.state.length) {
+                      if (this.state[neighbor2][j] != obstacleID
+                      && this.state[neighbor2][j] != boxID
+                      && this.state[neighbor2][j] != goalBoxID) {
+                        this.untried.push(this.tree.actUp);
+                      }
+                    }
+                    break;
+                }
+              }
+
+              neighbor = j - 1;
+              neighbor2 = j - 2;
+              if (neighbor >= 0) {
+                switch(this.state[i][neighbor]) {
+                  case freeID:
+                  case goalID:
+                    this.untried.push(this.tree.actLeft);
+                    break;
+                  case boxID:
+                  case goalBoxID:
+                    if (neighbor2 >= 0) {
+                      if (this.state[i][neighbor2] != obstacleID
+                      && this.state[i][neighbor2] != boxID
+                      && this.state[i][neighbor2] != goalBoxID) {
+                        this.untried.push(this.tree.actLeft);
+                      }
+                    }
+                    break;
+                }
+              }
+
+              neighbor = i - 1;
+              neighbor2 = i - 2;
+              if (neighbor >= 0) {
+                switch(this.state[neighbor][j]) {
+                  case freeID:
+                  case goalID:
+                    this.untried.push(this.tree.actDown);
+                    break;
+                  case boxID:
+                  case goalBoxID:
+                    if (neighbor2 >= 0) {
+                      if (this.state[neighbor2][j] != obstacleID
+                      && this.state[neighbor2][j] != boxID
+                      && this.state[neighbor2][j] != goalBoxID) {
+                        this.untried.push(this.tree.actDown);
+                      }
+                    }
+                    break;
+                }
+              }
+
+            }
+          }
+        }
+
+        this.untried.push(this.tree.actTerminate);
+
+      }
+    }
+
+
+    expand() { // add a new child node and start a simulation at it if in visit tree
+      var action = this.policy();
+      var ch = null;
+      if (Math.random() < 1 && this.tree.type === "v") console.log(this.tree.arr.length);
+      switch(action.charAt(0)) {
+
+        case "r":
+        case "u":
+        case "l":
+        case "d":
+          ch = this.addMovement(action.charAt(0));
+          break;
+
+        case "o":
+          ch = this.addFree(action.split("|")[1], action.split("|")[2]);
+          break;
+
+        case "b":
+          ch = this.addBox(action.split("|")[1], action.split("|")[2]);
+          break;
+
+        case "f":
+          ch = this.addFrozen();
+          break;
+
+        case "t":
+          ch = this.addTerminal();
+          break;
+
+        default:
+          debugger;
+          break;
+      }
+      if (ch.tree.type === "v") ch.simulate(); else return ch;
+    }
+
+
+    policy() { // return uniform-random untried action (string) to add as new node
+      /// !!! This is apparently the biggest performance hog by a wide margin
+      // weightedDiscreteRandom by itself doesn't take very long
+      var weights = [];
+      for (var i = 0; i < this.untried.length; i++) {
+        weights.push(1);
+      }
+      var index = weightedDiscreteRandom(weights, JSON.parse(JSON.stringify(this.untried)));
+      var action = this.untried[index];
+      this.untried.splice(index, 1);
+      return action;
+    }
+
+
+    addTerminal() { // adds the "evaluate level" action as a child node (returned)
+      var newState = JSON.parse(JSON.stringify(this.state));
+      for (var i = 0; i < this.state.length; i++) {
+        for (var j = 0; j < this.state[i].length; j++) {
+
+          switch (this.state[i][j]) {
+            case boxID:
+              newState[i][j] = goalID;
+              break;
+            case charID:
+            case goalCharID:
+              newState[i][j] -= 2;
+              newState[Math.trunc(this.state.length / 2)][Math.trunc(this.state[0].length / 2)] += 2;
+              break;
+          }
+
+          switch (this.frozen[i][j]) {
+            case boxID:
+              newState[i][j] += 1;
+              break;
+          }
+
+          switch (newState[i][j]) {
+            case goalBoxID:
+              newState[i][j] = freeID;
+              break;
+          }
+        }
+      }
+      if (this.tree.type === "v") {
+        return new VisitedNode(this.tree, this.index, [], newState, this.frozen, true);
+      } else if (this.tree.type === "u") {
+        return new UnvisitedNode(this.tree, this.index, [], newState, this.frozen, true);
+      } else debugger;
+    }
+
+
+    addFrozen() {
+      if (this.tree.type === "v") {
+        return new VisitedNode(this.tree, this.index, [], this.state, this.state);
+      } else if (this.tree.type === "u") {
+        return new UnvisitedNode(this.tree, this.index, [], this.state, this.state);
+      } else debugger;
+    }
+
+
+    addBox(i, j) {
+      var newState = JSON.parse(JSON.stringify(this.state));
+      newState[i][j] += 1;
+      if (this.tree.type === "v") {
+        return new VisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else if (this.tree.type === "u") {
+        return new UnvisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else debugger;
+    }
+
+
+    addFree(i, j) {
+      var newState = JSON.parse(JSON.stringify(this.state));
+      newState[i][j] = 0;
+      if (this.tree.type === "v") {
+        return new VisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else if (this.tree.type === "u") {
+        return new UnvisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else debugger;
+    }
+
+
+    addMovement(direction) {
+      var newState = JSON.parse(JSON.stringify(this.state));
+      for (var i = 0; i < this.state.length; i++) {
+        for (var j = 0; j < this.state[i].length; j++) {
+          if (this.state[i][j] === charID) {
+            switch(direction) {
+
+              case "r":
+                var neighbor = j + 1;
+                newState[i][j] -= 2;
+                newState[i][neighbor] += 2;
+                if (this.state[i][neighbor] === boxID || this.state[i][neighbor] === goalBoxID) {
+                  newState[i][neighbor] -= 1;
+                  newState[i][neighbor + 1] += 1;
+                }
+                break;
+
+              case "u":
+                var neighbor = i + 1;
+                newState[i][j] -= 2;
+                newState[neighbor][j] += 2;
+                if (this.state[neighbor][j] === boxID || this.state[neighbor][j] === goalBoxID) {
+                  newState[neighbor][j] -= 1;
+                  newState[neighbor + 1][j] += 1;
+                }
+                break;
+
+              case "l":
+                var neighbor = j - 1;
+                newState[i][j] -= 2;
+                newState[i][neighbor] += 2;
+                if (this.state[i][neighbor] === boxID || this.state[i][neighbor] === goalBoxID) {
+                  newState[i][neighbor] -= 1;
+                  newState[i][neighbor - 1] += 1;
+                }
+                break;
+
+              case "d":
+                var neighbor = i - 1;
+                newState[i][j] -= 2;
+                newState[neighbor][j] += 2;
+                if (this.state[neighbor][j] === boxID || this.state[neighbor][j] === goalBoxID) {
+                  newState[neighbor][j] -= 1;
+                  newState[neighbor - 1][j] += 1;
+                }
+                break;
+            }
+          }
+        }
+      }
+      if (this.tree.type === "v") {
+        return new VisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else if (this.tree.type === "u") {
+        return new UnvisitedNode(this.tree, this.index, [], newState, this.frozen);
+      } else debugger;
+    }
+
+
+    evaluate() {
+      if (this.terminal === false) debugger;
+
+      var terrain = 0;
+      var congestion = 0;
+
+      var neighbor = 0;
+
+      var boxes = [];
+      var goalsUnordered = [];
+
+      for (var i = 0; i < this.state.length; i++) {
+        for (var j = 0; j < this.state[i].length; j++) {
+          if (this.state[i][j] === freeID || this.state[i][j] === freeID + 1 ||
+              this.state[i][j] === freeID + 2) {
+
+            neighbor = j + 1; // right
+            if (neighbor < this.state[i].length) {
+              if (this.state[i][neighbor] === obstacleID) {
+                terrain++;
+              }
+            }
+
+            neighbor = i + 1; // up
+            if (neighbor < this.state.length) {
+              if (this.state[neighbor][j] === obstacleID) {
+                terrain++;
+              }
+            }
+
+            neighbor = j - 1; // left
+            if (neighbor >= 0) {
+              if (this.state[i][neighbor] === obstacleID) {
+                terrain++;
+              }
+            }
+
+            neighbor = i - 1; // down
+            if (neighbor >= 0) {
+              if (this.state[neighbor][j] === obstacleID) {
+                terrain++;
+              }
+            }
+
+          }
+
+          if (this.state[i][j] === boxID) {
+            boxes.push([i, j]);
+          }
+
+          if (this.state[i][j] === goalID || this.state[i][j] === goalCharID) {
+            goalsUnordered.push([i, j]);
+          }
+
+        }
+      }
+
+      var goals = [];
+      for (var box = 0; box < boxes.length; box++) {
+        var shortest = [Number.POSITIVE_INFINITY, goalsUnordered[box]];
+        for (var goal = 0; goal < goalsUnordered.length; goal++) {
+          var dist = Math.sqrt((boxes[box][0] - goalsUnordered[goal][0])**2
+            + (boxes[box][1] - goalsUnordered[goal][1])**2);
+          if (dist < shortest[0]) {
+            shortest[0] = dist;
+            shortest[1] = goal; // index in the goalsUnordered array
+          }
+
+        }
+        goals.push(goalsUnordered[shortest[1]]); // reorder corresponding to boxes
+        goalsUnordered.splice(shortest[1], 1);
+      }
+
+      // constant parameters
+      var boxVal = 6;
+      var goalVal = 6;
+      var obstVal = 12;
+      var terrWeight = 5;
+      var congWeight = 10;
+      var boxWeight = 5;
+
+      for (var box = 0; box < boxes.length; box++) {
+        var boxCount = 0;
+        var goalCount = 0;
+        var obstacleCount = 0;
+        var areaCount = 0;
+
+        for (var i = Math.min(boxes[box][0],
+         goals[box][0]);
+          i <= Math.max(boxes[box][0],
+           goals[box][0]);
+            i++) {
+          for (var j = Math.min(boxes[box][1], goals[box][1]); j <= Math.max(boxes[box][1], goals[box][1]); j++) {
+            if (this.state[i][j] === boxID) {
+              boxCount += 1;
+            }
+            if (this.state[i][j] === goalID) {
+              goalCount += 1;
+            }
+            if (this.state[i][j] === obstacleID) {
+              obstacleCount += 1;
+            }
+            areaCount += 1;
+          }
+        }
+        congestion += (boxVal * boxCount + goalVal * goalCount) / (obstVal * (areaCount - obstacleCount))
+      }
+      return (terrWeight * terrain + congWeight * congestion + boxWeight * boxes.length);
+    }
+
+  }
+
+
+  class VisitedNode extends MctsNode {
+    constructor(
+      tree, par = null, children = [], state = [],
+      frozen = false, terminal = false,
+      untried = [], q = 0, n = 0)
+    {
+      super(tree, par, children, state, frozen, terminal, untried);
+      this.q = q;
+      this.n = n;
+    }
+
+
+    select() { // use uct to navigate to node with untried actions
+      if (this.untried.length > 0 || this.terminal === true) {
+        //console.log(this, this.untried, this.untried.length);
+        //console.log(this.tree.arr);
+        //debugger;
+        return this;
+      }
+      if (this.children.length === 0) debugger;
+      var bestNode = null;
+      var bestUct = Number.NEGATIVE_INFINITY;
+      for (var i = 0; i < this.children.length; i++) {
+        var curUct = this.child(i).uct();
+        //console.log(curUct);
+        if (curUct > bestUct) {
+          bestNode = this.child(i);
+          bestUct = curUct;
+        }
+      }
+      //console.log(bestUct, bestNode);
+      //debugger;
+      return bestNode.select();
+    }
+
+
+    simulate() { // add a node to visit tree by running a sim starting at it
+      // nice about this approach: GC will delete the unvisit tree afterward
+      var simArr = [];
+      var simulation = new UnvisitTree(simArr, this.tree.m, this.tree.n, "u", this.state);
+      var simNode = simulation.root;
+      simNode.frozen = this.frozen;
+      simNode.terminal = this.terminal;
+      //testArr.push([this, simNode]);
+      while (simNode.terminal === false) {
+        simNode = simNode.expand();
+      }
+      var result = simNode.evaluate();
+      this.tree.update(simNode, result);
+      this.propagate(result);
+      return simNode;
+    }
+
+
+    propagate(result) { // backpropagate sim result to root
+      this.q += result;
+      this.n += 1;
+      if (this.parent() === null) return;
+      this.parent().propagate(result);
+    }
+
+
+    uct(c = Math.sqrt(2)) {
+      if (this.parent() === null) debugger;
+      return ((this.q / this.n) + c * Math.sqrt(Math.log(this.parent().n) / this.n))
+    }
+
+  }
+
+
+  class UnvisitedNode extends MctsNode {
+    constructor(
+    tree, par = null, children = [], state = [],
+    frozen = false, terminal = false, untried = [])
+    {
+      super(tree, par, children, state, frozen, terminal, untried);
+    }
+
+
+  }
+
+
+  function weightedDiscreteRandom(weights, values) {
+    // returns INDEX not value
+    var sum = weights.reduce(function(a, b) {return a + b;}, 0);
+    var adjWeights = weights.map(function(x) {return x / sum});
+    var num = Math.random();
+    var s = 0;
+    var lastIndex = adjWeights.length - 1;
+
+    for (var i = 0; i < lastIndex; ++i) {
+        s += adjWeights[i];
+        if (num < s) {
+            return i;
+        }
+    }
+
+    return lastIndex;
+  }
+
+
+  testArr = [];
+  var x = 6;
+  var y = 6;
+  var threshold = (x * y) * 1000;
+  var mainArr = []
+  var mainTree = new VisitTree(mainArr, x, y, "v")
+  mainTree.run(threshold);
+  debugger;
+  self.close();
+
+
+
+
+</script>
+
+<script type="text/javascript">
+
+  var bestPuzzle;
+  var w;
+  var blob = new Blob([document.querySelector('#worker1').textContent]);
+
+  function mctsWork() {
+    if (typeof(Worker) === "undefined") {
+      alert("Your browser does not support Web Workers, which is required for this function. Try using a popular and up-to-date browser.")
+      return null;
+    }
+    if (typeof(w) === "undefined") {
+      w = new Worker(window.URL.createObjectURL(blob));
+    }
+    w.onmessage = function(event) {
+      bestPuzzle = event.data;
+      console.log("Puzzle found: " + JSON.stringify(bestPuzzle.state))
+    };
+  }
+
+  function mctsStop() {
+    if (typeof(w) !== "undefined") {
+      w.terminate();
+      w = undefined;
+    }
+    console.log("Puzzle found: " + JSON.stringify(bestPuzzle.state))
+  }
+
+</script>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Game</th>
+    <th></th>
+  </tr>
+
+  <% @puzzles.each do |puzzle| %>
+    <tr>
+      <td><%= puzzle.name %></td>
+      <td><%= puzzle.game %></td>
+      <td><%= link_to 'Show', puzzle_path(puzzle) %></td>
+      <td><%= link_to 'Edit', edit_puzzle_path(puzzle) %></td>
+      <td><%= link_to 'Remove', puzzle_path(puzzle),
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+</table>

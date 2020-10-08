@@ -1,0 +1,644 @@
+<h1>Portal Chess</h1>
+<h4>A 2v2 chess variant with teleportation and hidden information.</h4><br>
+
+<table style="text-align:center;border-spacing:0pt;font-family:&#39;Arial Unicode MS&#39;; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 0pt">
+
+<tbody><tr>
+<td style="width:16pt; font-size:200%">8
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 1pt"><span id="b1_a8" style="font-size:300%;">♜</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_b8" style="font-size:300%;">♞</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_c8" style="font-size:300%;">♝</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_d8" style="font-size:300%;">♛</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_e8" style="font-size:300%;">♚</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_f8" style="font-size:300%;">♝</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_g8" style="font-size:300%;">♞</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h8" style="font-size:300%;">♜</span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">7
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_b7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_d7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_f7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g7" style="font-size:300%;">♟</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h7" style="font-size:300%;">♟</span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">6
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_c6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_e6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_g6" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h6" style="font-size:300%;"> </span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">5
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_b5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_d5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_f5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g5" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h5" style="font-size:300%;"> </span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">4
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_c4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_e4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_g4" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h4" style="font-size:300%;"> </span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">3
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_b3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_d3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_f3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g3" style="font-size:300%;"> </span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h3" style="font-size:300%;"> </span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">2
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_c2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_e2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt;"><span id="b1_g2" style="font-size:300%;">♙</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h2" style="font-size:300%;">♙</span>
+</td></tr>
+<tr>
+<td style="width:16pt; font-size:200%">1
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 00pt 1pt 1pt" bgcolor="silver"><span id="b1_a1" style="font-size:300%;">♖</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_b1" style="font-size:300%;">♘</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_c1" style="font-size:300%;">♗</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_d1" style="font-size:300%;">♕</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_e1" style="font-size:300%;">♔</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_f1" style="font-size:300%;">♗</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_g1" style="font-size:300%;">♘</span>
+</td>
+<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 1pt 0pt"><span id="b1_h1" style="font-size:300%;">♖</span>
+</td></tr>
+<tr>
+<td>
+</td>
+<td style="height:24pt; font-size:200%">a
+</td>
+<td style="height:24pt; font-size:200%">b
+</td>
+<td style="height:24pt; font-size:200%">c
+</td>
+<td style="height:24pt; font-size:200%">d
+</td>
+<td style="height:24pt; font-size:200%">e
+</td>
+<td style="height:24pt; font-size:200%">f
+</td>
+<td style="height:24pt; font-size:200%">g
+</td>
+<td style="height:24pt; font-size:200%">h
+</td></tr></tbody></table>
+
+<script type="text/javascript">
+
+
+  class ChessGame {
+    constructor(boards) {
+      this.boards = boards;
+
+      for (var i = 0; i < this.boards.length; i++) {
+        new ChessPiece("♔", this.boards[i].p1, this.boards[i].getTile(5, 1));
+        new ChessPiece("♚", this.boards[i].p2, this.boards[i].getTile(5, 8));
+        new ChessPiece("♕", this.boards[i].p1, this.boards[i].getTile(4, 1));
+        new ChessPiece("♛", this.boards[i].p2, this.boards[i].getTile(4, 8));
+        new ChessPiece("♗", this.boards[i].p1, this.boards[i].getTile(3, 1));
+        new ChessPiece("♝", this.boards[i].p2, this.boards[i].getTile(3, 8));
+        new ChessPiece("♗", this.boards[i].p1, this.boards[i].getTile(6, 1));
+        new ChessPiece("♝", this.boards[i].p2, this.boards[i].getTile(6, 8));
+        new ChessPiece("♘", this.boards[i].p1, this.boards[i].getTile(2, 1));
+        new ChessPiece("♞", this.boards[i].p2, this.boards[i].getTile(2, 8));
+        new ChessPiece("♘", this.boards[i].p1, this.boards[i].getTile(7, 1));
+        new ChessPiece("♞", this.boards[i].p2, this.boards[i].getTile(7, 8));
+        new ChessPiece("♖", this.boards[i].p1, this.boards[i].getTile(1, 1));
+        new ChessPiece("♜", this.boards[i].p2, this.boards[i].getTile(1, 8));
+        new ChessPiece("♖", this.boards[i].p1, this.boards[i].getTile(8, 1));
+        new ChessPiece("♜", this.boards[i].p2, this.boards[i].getTile(8, 8));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(8, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(8, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(7, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(7, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(6, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(6, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(5, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(5, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(4, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(4, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(3, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(3, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(2, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(2, 7));
+        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(1, 2));
+        new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(1, 7));
+      }
+    }
+
+  }
+
+
+  class ChessBoard {
+    constructor(id, p1, p2, m = 8, n = 8) {
+      this.id = id;
+      this.p1 = p1;
+      this.p2 = p2;
+      this.m = m;
+      this.n = n;
+      this.tiles = [];
+
+      this.p1.board = this;
+      this.p2.board = this;
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a1"));
+      row.push(new ChessTile(this.id + "_b1"));
+      row.push(new ChessTile(this.id + "_c1"));
+      row.push(new ChessTile(this.id + "_d1"));
+      row.push(new ChessTile(this.id + "_e1"));
+      row.push(new ChessTile(this.id + "_f1"));
+      row.push(new ChessTile(this.id + "_g1"));
+      row.push(new ChessTile(this.id + "_h1"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a2"));
+      row.push(new ChessTile(this.id + "_b2"));
+      row.push(new ChessTile(this.id + "_c2"));
+      row.push(new ChessTile(this.id + "_d2"));
+      row.push(new ChessTile(this.id + "_e2"));
+      row.push(new ChessTile(this.id + "_f2"));
+      row.push(new ChessTile(this.id + "_g2"));
+      row.push(new ChessTile(this.id + "_h2"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a3"));
+      row.push(new ChessTile(this.id + "_b3"));
+      row.push(new ChessTile(this.id + "_c3"));
+      row.push(new ChessTile(this.id + "_d3"));
+      row.push(new ChessTile(this.id + "_e3"));
+      row.push(new ChessTile(this.id + "_f3"));
+      row.push(new ChessTile(this.id + "_g3"));
+      row.push(new ChessTile(this.id + "_h3"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a4"));
+      row.push(new ChessTile(this.id + "_b4"));
+      row.push(new ChessTile(this.id + "_c4"));
+      row.push(new ChessTile(this.id + "_d4"));
+      row.push(new ChessTile(this.id + "_e4"));
+      row.push(new ChessTile(this.id + "_f4"));
+      row.push(new ChessTile(this.id + "_g4"));
+      row.push(new ChessTile(this.id + "_h4"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a5"));
+      row.push(new ChessTile(this.id + "_b5"));
+      row.push(new ChessTile(this.id + "_c5"));
+      row.push(new ChessTile(this.id + "_d5"));
+      row.push(new ChessTile(this.id + "_e5"));
+      row.push(new ChessTile(this.id + "_f5"));
+      row.push(new ChessTile(this.id + "_g5"));
+      row.push(new ChessTile(this.id + "_h5"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a6"));
+      row.push(new ChessTile(this.id + "_b6"));
+      row.push(new ChessTile(this.id + "_c6"));
+      row.push(new ChessTile(this.id + "_d6"));
+      row.push(new ChessTile(this.id + "_e6"));
+      row.push(new ChessTile(this.id + "_f6"));
+      row.push(new ChessTile(this.id + "_g6"));
+      row.push(new ChessTile(this.id + "_h6"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a7"));
+      row.push(new ChessTile(this.id + "_b7"));
+      row.push(new ChessTile(this.id + "_c7"));
+      row.push(new ChessTile(this.id + "_d7"));
+      row.push(new ChessTile(this.id + "_e7"));
+      row.push(new ChessTile(this.id + "_f7"));
+      row.push(new ChessTile(this.id + "_g7"));
+      row.push(new ChessTile(this.id + "_h7"));
+      this.tiles.push(row);
+
+      var row = []
+      row.push(new ChessTile(this.id + "_a8"));
+      row.push(new ChessTile(this.id + "_b8"));
+      row.push(new ChessTile(this.id + "_c8"));
+      row.push(new ChessTile(this.id + "_d8"));
+      row.push(new ChessTile(this.id + "_e8"));
+      row.push(new ChessTile(this.id + "_f8"));
+      row.push(new ChessTile(this.id + "_g8"));
+      row.push(new ChessTile(this.id + "_h8"));
+      this.tiles.push(row);
+
+    }
+
+    getTile(x, y) {
+      return this.tiles[y-1][x-1];
+    }
+
+    addPiece(piece) {
+      var tile = piece.tile;
+      if (!tile.isEmpty()) {
+        console.log("Error adding piece: Tile is already occupied");
+        debugger;
+      } else {
+        tile.setPiece(piece);
+      }
+    }
+
+    movePiece(x1, y1, x2, y2) {
+      var sourcePiece = this.getTile(x1, y1).getPiece();
+      var targetPiece = this.getTile(x2, y2).getPiece();
+      var emsg = "That piece cannot move there."
+
+      if (x2 > 8 || x2 < 1 || y2 > 8 || y2 < 1 || (x1 === x2 && y1 === y2)) {
+        console.log(emsg);
+        return null;
+      }
+
+      if (targetPiece !== null) {
+        if (targetPiece.owner === sourcePiece.owner) {
+          console.log(emsg);
+          return null;
+        }
+      }
+
+      if (sourcePiece === null) {
+        console.log("Source tile is empty.");
+        return null;
+      }
+
+      switch(sourcePiece.type) {
+        case "♘":
+        case "♞":
+          if ((Math.abs(x2 - x1) === 1 && Math.abs(y2 - y1) === 2) || (Math.abs(x2 - x1) === 2 && Math.abs(y2 - y1) === 1)) {
+            // good, fallthrough
+          } else {
+            console.log(emsg);
+            return null;
+          }
+          break;
+
+        case "♖":
+        case "♜":
+          if (x1 !== x2 && y1 !== y2) {
+            console.log(emsg);
+            return null;
+          }
+          if (x1 === x2) {
+            for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
+              var piece = this.getTile(x1, i).getPiece();
+              if (piece !== null) {
+                console.log(emsg);
+                return null;
+              }
+            }
+          }
+          if (y1 === y2) {
+            for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
+              var piece = this.getTile(i, y1).getPiece();
+              if (piece !== null) {
+                console.log(emsg);
+                return null;
+              }
+            }
+          }
+          break;
+
+        case "♗":
+        case "♝":
+          if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
+            console.log(emsg);
+            return null;
+          }
+          var xsign = Math.sign(x2 - x1);
+          var ysign = Math.sign(y2 - y1);
+          for (var i = 1; i < Math.abs(x2 - x1); i++) {
+            var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
+            if (piece !== null) {
+              console.log(emsg);
+              return null;
+            }
+          }
+          break;
+
+        case "♕":
+        case "♛":
+        var firstCheckFailed = false;
+        if (x1 !== x2 && y1 !== y2) {
+          if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
+            console.log(emsg);
+            return null;
+          }
+          var xsign = Math.sign(x2 - x1);
+          var ysign = Math.sign(y2 - y1);
+          for (var i = 1; i < Math.abs(x2 - x1); i++) {
+            var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
+            if (piece !== null) {
+              console.log(emsg);
+              return null;
+            }
+          }
+        }
+        if (x1 === x2) {
+          for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
+            var piece = this.getTile(x1, i).getPiece();
+            if (piece !== null) {
+              console.log(emsg);
+              return null;
+            }
+          }
+        }
+        if (y1 === y2) {
+          for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
+            var piece = this.getTile(i, y1).getPiece();
+            if (piece !== null) {
+              console.log(emsg);
+              return null;
+            }
+          }
+        }
+          break;
+
+        case "♔":
+        case "♚":
+          if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1) {
+            console.log(emsg);
+            return null;
+          }
+          break;
+
+        case "♙":
+        case "♟":
+          if (sourcePiece.owner.bottom) {
+            if (y2 <= y1) {
+              console.log(emsg);
+              return null;
+            }
+            if (y2 - y1 > 1) {
+              if (y2 - y1 === 2) {
+                if (y1 > 2) {
+                  console.log(emsg);
+                  return null;
+                }
+              } else {
+                console.log(emsg);
+                return null;
+              }
+            }
+            if (x1 !== x2) {
+              if (Math.abs(x2 - x1) > 1) {
+                console.log(emsg);
+                return null;
+              }
+              if (Math.abs(x2 - x1) === 1) {
+                if (targetPiece === null) {
+                  console.log(emsg);
+                  return null;
+                }
+              }
+            } else {
+              if (targetPiece !== null) {
+                console.log(emsg);
+                return null;
+              }
+              if (y2 - y1 === 2 && this.getTile(x1, y1 + 1).getPiece() !== null) {
+                console.log(emsg);
+                return null;
+              }
+            }
+          } else {
+            if (y2 >= y1) {
+              console.log(emsg);
+              return null;
+            }
+            if (y1 - y2 > 1) {
+              if (y1 - y2 === 2) {
+                if (y1 < 7) {
+                  console.log(emsg);
+                  return null;
+                }
+              } else {
+                console.log(emsg);
+                return null;
+              }
+            }
+            if (x1 !== x2) {
+              if (Math.abs(x2 - x1) > 1) {
+                console.log(emsg);
+                return null;
+              }
+              if (Math.abs(x2 - x1) === 1) {
+                if (targetPiece === null) {
+                  console.log(emsg);
+                  return null;
+                }
+              }
+            } else {
+              if (targetPiece !== null) {
+                console.log(emsg);
+                return null;
+              }
+              if (y1 - y2 === 2 && this.getTile(x1, y1 - 1).getPiece() !== null) {
+                console.log(emsg);
+                return null;
+              }
+            }
+          }
+          break;
+
+      }
+      this.getTile(x1, y1).getPiece().moveTo(x2, y2);
+
+    }
+
+  }
+
+
+  class ChessPlayer {
+    constructor(username, bottom = true, board = null) {
+      this.username = username;
+      this.bottom = bottom;
+      this.board = board;
+    }
+
+  }
+
+
+  class ChessTile {
+    constructor(code, piece = null) {
+      this.code = code;
+      this.setPiece(piece);
+    }
+
+    isEmpty() {
+      if (this.piece === null) return true; else return false;
+    }
+
+    getPiece() {
+      return this.piece;
+    }
+
+    setPiece(newPiece) {
+      this.piece = newPiece;
+      if (newPiece === null) {
+        document.getElementById(this.code).innerHTML = " ";
+      } else {
+        document.getElementById(this.code).innerHTML = newPiece.type;
+      }
+    }
+
+  }
+
+
+  class ChessPiece {
+    constructor(type, owner, tile) {
+      this.type = type; // use the unicode symbol
+      this.owner = owner;
+      this.tile = tile;
+
+      this.owner.board.addPiece(this);
+    }
+
+    setTile(newTile) {
+      this.tile = newTile;
+    }
+
+    moveTo(x, y, newOwner = this.owner) {
+      this.tile.setPiece(null);
+      var newTile = newOwner.board.getTile(x, y);
+      newTile.setPiece(this);
+      this.tile = newTile;
+      this.owner = newOwner;
+      // if used without optional arg, should be normal chessboard movement
+    }
+
+  }
+
+
+  // Testing
+
+  var p1 = new ChessPlayer("Nicky", true);
+  var p2 = new ChessPlayer("Peetzkee", false);
+  var b1 = new ChessBoard("b1", p1, p2);
+  var g1 = new ChessGame([b1]);
+  var activePiece = null;
+
+  function activatePiece(piece) {
+    document.getElementById(piece.tile.code).style.backgroundColor = 'green'
+  }
+
+  function deactivatePiece(piece) {
+    document.getElementById(piece.tile.code).style.backgroundColor = 'white'
+  }
+
+  document.getElementById("b1_a2").addEventListener('click', event => {
+    if (activePiece === null) {
+      activePiece = b1.getTile(1,2).getPiece();
+      activatePiece(activePiece);
+    } else if (activePiece === b1.getTile(1,2).getPiece()) {
+      deactivatePiece(activePiece);
+      activePiece = null;
+    }
+    console.log(activePiece);
+  });
+  document.getElementById("b1_a4").addEventListener('click', event => {
+    activePiece = b1.getTile(1,2).getPiece();
+    console.log(activePiece);
+  });
+
+</script>
+
+<br><h2>Rules</h2>
+<p>You and your ally take turns at the same time, but you cannot talk freely. In fact, while you can fully see your board, you can only see your ally's pieces on their board; your ally's opponent's pieces are hidden. You have only two ways of communicating with your ally: a "Request aid" button, and a "Sending aid" button, either of which can be pressed before your turn begins. During your turn, you can choose to teleport any number of your pieces that are adjacent to your king onto your ally's board, and your ally must place them adjacent to their king after their turn. This counts as your turn.</p>
