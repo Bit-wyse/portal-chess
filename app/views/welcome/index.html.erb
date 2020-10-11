@@ -1,178 +1,253 @@
-<h1>Portal Chess</h1>
-<h4>A 2v2 chess variant with teleportation and hidden information.</h4><br>
+<style media="screen">
+  .chesspiece {
+    font-size:300%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color:#faebd7;
+    text-shadow: -1px 1px 1px #2f4f4f, 1px 1px 1px #2f4f4f, 1px -1px 1px #2f4f4f, -1px -1px 1px #2f4f4f;
+  }
 
-<table style="text-align:center;border-spacing:0pt;font-family:&#39;Arial Unicode MS&#39;; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 0pt">
+  .chesspiecealt {
+    font-size:300%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color:#2f4f4f;
+    text-shadow: -1px 1px 1px #faebd7, 1px 1px 1px #faebd7, 1px -1px 1px #faebd7, -1px -1px 1px #faebd7;
+  }
+
+  .chesstile {
+    width:48pt;
+    height:48pt;
+    border-color:black;
+    border-style:solid;
+    border-width: 0pt 0pt 0pt 0pt;
+    background-color:#deb887;
+  }
+
+  .chesstilealt {
+    width:48pt;
+    height:48pt;
+    border-color:black;
+    border-style:solid;
+    border-width: 0pt 0pt 0pt 0pt;
+    background-color:#c59250;
+  }
+
+  .gridlabel {
+    width:24pt;
+    height:24pt;
+    font-size:200%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .textbox {
+    width:408pt;
+    height:136pt;
+    overflow:scroll;
+    background-color:lightgrey;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 150%;
+    line-height: 1.5;
+    padding:5pt;
+    margin-left:40pt;
+    border-color:black;
+    border-style:solid;
+    border-width: 1pt 1pt 1pt 1pt;
+  }
+</style>
+
+<h1>Portal Chess</h1>
+<h4>A 2v2 chess variant with [special rules]</h4><br>
+
+<div id="textfeed" class="textbox">
+
+</div><br><br>
+
+<table style="text-align:center; border-spacing:0pt; font-family:&#39;Arial Unicode MS&#39;; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 0pt">
 
 <tbody><tr>
-<td style="width:16pt; font-size:200%">8
+<td class="gridlabel">8
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 1pt"><span id="b1_a8" style="font-size:300%;">♜</span>
+<td id="b1t_a8" class="chesstile" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 1pt"><span id="b1_a8" class="chesspiece">♜</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_b8" style="font-size:300%;">♞</span>
+<td id="b1t_b8" class="chesstilealt" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt"><span id="b1_b8" class="chesspiece">♞</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_c8" style="font-size:300%;">♝</span>
+<td id="b1t_c8" class="chesstile" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt"><span id="b1_c8" class="chesspiece">♝</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_d8" style="font-size:300%;">♛</span>
+<td id="b1t_d8" class="chesstilealt" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_d8" class="chesspiece">♛</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_e8" style="font-size:300%;">♚</span>
+<td id="b1t_e8" class="chesstile" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt"><span id="b1_e8" class="chesspiece">♚</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_f8" style="font-size:300%;">♝</span>
+<td id="b1t_f8" class="chesstilealt" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt" bgcolor="silver"><span id="b1_f8" class="chesspiece">♝</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 0pt 0pt 0pt"><span id="b1_g8" style="font-size:300%;">♞</span>
+<td id="b1t_g8" class="chesstile" style="border-collapse:collapse; border-width: 1pt 0pt 0pt 0pt"><span id="b1_g8" class="chesspiece">♞</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 1pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h8" style="font-size:300%;">♜</span>
+<td id="b1t_h8" class="chesstilealt" style="border-collapse:collapse; border-width: 1pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h8" class="chesspiece">♜</span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">7
+<td class="gridlabel">7
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a7" style="font-size:300%;">♟</span>
+<td id="b1t_a7" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_b7" style="font-size:300%;">♟</span>
+<td id="b1t_b7" class="chesstile"><span id="b1_b7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c7" style="font-size:300%;">♟</span>
+<td id="b1t_c7" class="chesstilealt" bgcolor="silver"><span id="b1_c7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_d7" style="font-size:300%;">♟</span>
+<td id="b1t_d7" class="chesstile"><span id="b1_d7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e7" style="font-size:300%;">♟</span>
+<td id="b1t_e7" class="chesstilealt" bgcolor="silver"><span id="b1_e7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_f7" style="font-size:300%;">♟</span>
+<td id="b1t_f7" class="chesstile"><span id="b1_f7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g7" style="font-size:300%;">♟</span>
+<td id="b1t_g7" class="chesstilealt" bgcolor="silver"><span id="b1_g7" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h7" style="font-size:300%;">♟</span>
+<td id="b1t_h7" class="chesstile" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h7" class="chesspiece">♟</span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">6
+<td class="gridlabel">6
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a6" style="font-size:300%;"> </span>
+<td id="b1t_a6" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b6" style="font-size:300%;"> </span>
+<td id="b1t_b6" class="chesstilealt" bgcolor="silver"><span id="b1_b6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_c6" style="font-size:300%;"> </span>
+<td id="b1t_c6" class="chesstile"><span id="b1_c6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d6" style="font-size:300%;"> </span>
+<td id="b1t_d6" class="chesstilealt" bgcolor="silver"><span id="b1_d6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_e6" style="font-size:300%;"> </span>
+<td id="b1t_e6" class="chesstile"><span id="b1_e6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f6" style="font-size:300%;"> </span>
+<td id="b1t_f6" class="chesstilealt" bgcolor="silver"><span id="b1_f6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_g6" style="font-size:300%;"> </span>
+<td id="b1t_g6" class="chesstile"><span id="b1_g6" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h6" style="font-size:300%;"> </span>
+<td id="b1t_h6" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h6" class="chesspiece"> </span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">5
+<td class="gridlabel">5
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a5" style="font-size:300%;"> </span>
+<td id="b1t_a5" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_b5" style="font-size:300%;"> </span>
+<td id="b1t_b5" class="chesstile"><span id="b1_b5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c5" style="font-size:300%;"> </span>
+<td id="b1t_c5" class="chesstilealt" bgcolor="silver"><span id="b1_c5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_d5" style="font-size:300%;"> </span>
+<td id="b1t_d5" class="chesstile"><span id="b1_d5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e5" style="font-size:300%;"> </span>
+<td id="b1t_e5" class="chesstilealt" bgcolor="silver"><span id="b1_e5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_f5" style="font-size:300%;"> </span>
+<td id="b1t_f5" class="chesstile"><span id="b1_f5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g5" style="font-size:300%;"> </span>
+<td id="b1t_g5" class="chesstilealt" bgcolor="silver"><span id="b1_g5" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h5" style="font-size:300%;"> </span>
+<td id="b1t_h5" class="chesstile" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h5" class="chesspiece"> </span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">4
+<td class="gridlabel">4
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a4" style="font-size:300%;"> </span>
+<td id="b1t_a4" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b4" style="font-size:300%;"> </span>
+<td id="b1t_b4" class="chesstilealt" bgcolor="silver"><span id="b1_b4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_c4" style="font-size:300%;"> </span>
+<td id="b1t_c4" class="chesstile"><span id="b1_c4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d4" style="font-size:300%;"> </span>
+<td id="b1t_d4" class="chesstilealt" bgcolor="silver"><span id="b1_d4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_e4" style="font-size:300%;"> </span>
+<td id="b1t_e4" class="chesstile"><span id="b1_e4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f4" style="font-size:300%;"> </span>
+<td id="b1t_f4" class="chesstilealt" bgcolor="silver"><span id="b1_f4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_g4" style="font-size:300%;"> </span>
+<td id="b1t_g4" class="chesstile"><span id="b1_g4" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h4" style="font-size:300%;"> </span>
+<td id="b1t_h4" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h4" class="chesspiece"> </span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">3
+<td class="gridlabel">3
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a3" style="font-size:300%;"> </span>
+<td id="b1t_a3" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt" bgcolor="silver"><span id="b1_a3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_b3" style="font-size:300%;"> </span>
+<td id="b1t_b3" class="chesstile"><span id="b1_b3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_c3" style="font-size:300%;"> </span>
+<td id="b1t_c3" class="chesstilealt" bgcolor="silver"><span id="b1_c3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_d3" style="font-size:300%;"> </span>
+<td id="b1t_d3" class="chesstile"><span id="b1_d3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_e3" style="font-size:300%;"> </span>
+<td id="b1t_e3" class="chesstilealt" bgcolor="silver"><span id="b1_e3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_f3" style="font-size:300%;"> </span>
+<td id="b1t_f3" class="chesstile"><span id="b1_f3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_g3" style="font-size:300%;"> </span>
+<td id="b1t_g3" class="chesstilealt" bgcolor="silver"><span id="b1_g3" class="chesspiece"> </span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h3" style="font-size:300%;"> </span>
+<td id="b1t_h3" class="chesstile" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt"><span id="b1_h3" class="chesspiece"> </span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">2
+<td class="gridlabel">2
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a2" style="font-size:300%;">♙</span>
+<td id="b1t_a2" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 0pt 1pt"><span id="b1_a2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_b2" style="font-size:300%;">♙</span>
+<td id="b1t_b2" class="chesstilealt" bgcolor="silver"><span id="b1_b2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_c2" style="font-size:300%;">♙</span>
+<td id="b1t_c2" class="chesstile"><span id="b1_c2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_d2" style="font-size:300%;">♙</span>
+<td id="b1t_d2" class="chesstilealt" bgcolor="silver"><span id="b1_d2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_e2" style="font-size:300%;">♙</span>
+<td id="b1t_e2" class="chesstile"><span id="b1_e2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;" bgcolor="silver"><span id="b1_f2" style="font-size:300%;">♙</span>
+<td id="b1t_f2" class="chesstilealt" bgcolor="silver"><span id="b1_f2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt;"><span id="b1_g2" style="font-size:300%;">♙</span>
+<td id="b1t_g2" class="chesstile"><span id="b1_g2" class="chesspiece">♟</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h2" style="font-size:300%;">♙</span>
+<td id="b1t_h2" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 1pt 0pt 0pt" bgcolor="silver"><span id="b1_h2" class="chesspiece">♟</span>
 </td></tr>
 <tr>
-<td style="width:16pt; font-size:200%">1
+<td class="gridlabel">1
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 00pt 1pt 1pt" bgcolor="silver"><span id="b1_a1" style="font-size:300%;">♖</span>
+<td id="b1t_a1" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 00pt 1pt 1pt" bgcolor="silver"><span id="b1_a1" class="chesspiece">♜</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_b1" style="font-size:300%;">♘</span>
+<td id="b1t_b1" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt"><span id="b1_b1" class="chesspiece">♞</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_c1" style="font-size:300%;">♗</span>
+<td id="b1t_c1" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_c1" class="chesspiece">♝</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_d1" style="font-size:300%;">♕</span>
+<td id="b1t_d1" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt"><span id="b1_d1" class="chesspiece">♛</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_e1" style="font-size:300%;">♔</span>
+<td id="b1t_e1" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_e1" class="chesspiece">♚</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt"><span id="b1_f1" style="font-size:300%;">♗</span>
+<td id="b1t_f1" class="chesstile" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt"><span id="b1_f1" class="chesspiece">♝</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_g1" style="font-size:300%;">♘</span>
+<td id="b1t_g1" class="chesstilealt" style="border-collapse:collapse; border-width: 0pt 0pt 1pt 0pt" bgcolor="silver"><span id="b1_g1" class="chesspiece">♞</span>
 </td>
-<td style="width:48pt; height:48pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 1pt 1pt 0pt"><span id="b1_h1" style="font-size:300%;">♖</span>
+<td id="b1t_h1" class="chesstile" style="border-collapse:collapse; border-width: 0pt 1pt 1pt 0pt"><span id="b1_h1" class="chesspiece">♜</span>
 </td></tr>
 <tr>
 <td>
 </td>
-<td style="height:24pt; font-size:200%">a
+<td class="gridlabel">a
 </td>
-<td style="height:24pt; font-size:200%">b
+<td class="gridlabel">b
 </td>
-<td style="height:24pt; font-size:200%">c
+<td class="gridlabel">c
 </td>
-<td style="height:24pt; font-size:200%">d
+<td class="gridlabel">d
 </td>
-<td style="height:24pt; font-size:200%">e
+<td class="gridlabel">e
 </td>
-<td style="height:24pt; font-size:200%">f
+<td class="gridlabel">f
 </td>
-<td style="height:24pt; font-size:200%">g
+<td class="gridlabel">g
 </td>
-<td style="height:24pt; font-size:200%">h
+<td class="gridlabel">h
 </td></tr></tbody></table>
 
 <script type="text/javascript">
@@ -181,41 +256,81 @@
   class ChessGame {
     constructor(boards) {
       this.boards = boards;
+      this.activePiece = null;
+      this.textfeed = document.getElementById("textfeed");
 
       for (var i = 0; i < this.boards.length; i++) {
-        new ChessPiece("♔", this.boards[i].p1, this.boards[i].getTile(5, 1));
+        this.boards[i].game = this;
+        new ChessPiece("♚", this.boards[i].p1, this.boards[i].getTile(5, 1));
         new ChessPiece("♚", this.boards[i].p2, this.boards[i].getTile(5, 8));
-        new ChessPiece("♕", this.boards[i].p1, this.boards[i].getTile(4, 1));
+        new ChessPiece("♛", this.boards[i].p1, this.boards[i].getTile(4, 1));
         new ChessPiece("♛", this.boards[i].p2, this.boards[i].getTile(4, 8));
-        new ChessPiece("♗", this.boards[i].p1, this.boards[i].getTile(3, 1));
+        new ChessPiece("♝", this.boards[i].p1, this.boards[i].getTile(3, 1));
         new ChessPiece("♝", this.boards[i].p2, this.boards[i].getTile(3, 8));
-        new ChessPiece("♗", this.boards[i].p1, this.boards[i].getTile(6, 1));
+        new ChessPiece("♝", this.boards[i].p1, this.boards[i].getTile(6, 1));
         new ChessPiece("♝", this.boards[i].p2, this.boards[i].getTile(6, 8));
-        new ChessPiece("♘", this.boards[i].p1, this.boards[i].getTile(2, 1));
+        new ChessPiece("♞", this.boards[i].p1, this.boards[i].getTile(2, 1));
         new ChessPiece("♞", this.boards[i].p2, this.boards[i].getTile(2, 8));
-        new ChessPiece("♘", this.boards[i].p1, this.boards[i].getTile(7, 1));
+        new ChessPiece("♞", this.boards[i].p1, this.boards[i].getTile(7, 1));
         new ChessPiece("♞", this.boards[i].p2, this.boards[i].getTile(7, 8));
-        new ChessPiece("♖", this.boards[i].p1, this.boards[i].getTile(1, 1));
+        new ChessPiece("♜", this.boards[i].p1, this.boards[i].getTile(1, 1));
         new ChessPiece("♜", this.boards[i].p2, this.boards[i].getTile(1, 8));
-        new ChessPiece("♖", this.boards[i].p1, this.boards[i].getTile(8, 1));
+        new ChessPiece("♜", this.boards[i].p1, this.boards[i].getTile(8, 1));
         new ChessPiece("♜", this.boards[i].p2, this.boards[i].getTile(8, 8));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(8, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(8, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(8, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(7, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(7, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(7, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(6, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(6, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(6, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(5, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(5, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(5, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(4, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(4, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(4, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(3, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(3, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(3, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(2, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(2, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(2, 7));
-        new ChessPiece("♙", this.boards[i].p1, this.boards[i].getTile(1, 2));
+        new ChessPiece("♟", this.boards[i].p1, this.boards[i].getTile(1, 2));
         new ChessPiece("♟", this.boards[i].p2, this.boards[i].getTile(1, 7));
       }
+
+      this.textfeed.appendChild(document.createTextNode("Game started: " + this.boards[0].p1.username + " vs " + this.boards[0].p2.username))
+    }
+
+    activatePiece(piece) {
+      this.activePiece = piece;
+      piece.tile.tintActive();
+      for (var i = 1; i <= piece.tile.board.m; i++) {
+        for (var j = 1; j <= piece.tile.board.n; j++) {
+          var testTile = piece.tile.board.getTile(j, i);
+          if (i !== piece.tile.y || j !== piece.tile.x) {
+            if (piece.tile.board.isMoveValid(piece.tile.x, piece.tile.y, testTile.x, testTile.y)) {
+              testTile.tintHighlight();
+            } else {
+              testTile.tintShadow();
+            }
+          }
+        }
+      }
+    }
+
+    deactivatePiece(piece) {
+      piece.tile.tintClear();
+      for (var board = 0; board < this.boards.length; board++) {
+        for (var i = 1; i <= this.boards[board].m; i++) {
+          for (var j = 1; j <= this.boards[board].n; j++) {
+            this.boards[board].getTile(j, i).tintClear();
+          }
+        }
+      }
+      this.activePiece = null;
+    }
+
+    feedText(str) {
+      textfeed.appendChild(document.createElement("br"));
+      textfeed.appendChild(document.createTextNode(str));
+      textfeed.scrollTop = textfeed.scrollHeight;
     }
 
   }
@@ -229,97 +344,20 @@
       this.m = m;
       this.n = n;
       this.tiles = [];
+      this.game = null;
+      if (p1.bottom) this.turn = p1; else this.turn = p2;
 
       this.p1.board = this;
       this.p2.board = this;
 
-      var row = []
-      row.push(new ChessTile(this.id + "_a1"));
-      row.push(new ChessTile(this.id + "_b1"));
-      row.push(new ChessTile(this.id + "_c1"));
-      row.push(new ChessTile(this.id + "_d1"));
-      row.push(new ChessTile(this.id + "_e1"));
-      row.push(new ChessTile(this.id + "_f1"));
-      row.push(new ChessTile(this.id + "_g1"));
-      row.push(new ChessTile(this.id + "_h1"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a2"));
-      row.push(new ChessTile(this.id + "_b2"));
-      row.push(new ChessTile(this.id + "_c2"));
-      row.push(new ChessTile(this.id + "_d2"));
-      row.push(new ChessTile(this.id + "_e2"));
-      row.push(new ChessTile(this.id + "_f2"));
-      row.push(new ChessTile(this.id + "_g2"));
-      row.push(new ChessTile(this.id + "_h2"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a3"));
-      row.push(new ChessTile(this.id + "_b3"));
-      row.push(new ChessTile(this.id + "_c3"));
-      row.push(new ChessTile(this.id + "_d3"));
-      row.push(new ChessTile(this.id + "_e3"));
-      row.push(new ChessTile(this.id + "_f3"));
-      row.push(new ChessTile(this.id + "_g3"));
-      row.push(new ChessTile(this.id + "_h3"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a4"));
-      row.push(new ChessTile(this.id + "_b4"));
-      row.push(new ChessTile(this.id + "_c4"));
-      row.push(new ChessTile(this.id + "_d4"));
-      row.push(new ChessTile(this.id + "_e4"));
-      row.push(new ChessTile(this.id + "_f4"));
-      row.push(new ChessTile(this.id + "_g4"));
-      row.push(new ChessTile(this.id + "_h4"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a5"));
-      row.push(new ChessTile(this.id + "_b5"));
-      row.push(new ChessTile(this.id + "_c5"));
-      row.push(new ChessTile(this.id + "_d5"));
-      row.push(new ChessTile(this.id + "_e5"));
-      row.push(new ChessTile(this.id + "_f5"));
-      row.push(new ChessTile(this.id + "_g5"));
-      row.push(new ChessTile(this.id + "_h5"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a6"));
-      row.push(new ChessTile(this.id + "_b6"));
-      row.push(new ChessTile(this.id + "_c6"));
-      row.push(new ChessTile(this.id + "_d6"));
-      row.push(new ChessTile(this.id + "_e6"));
-      row.push(new ChessTile(this.id + "_f6"));
-      row.push(new ChessTile(this.id + "_g6"));
-      row.push(new ChessTile(this.id + "_h6"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a7"));
-      row.push(new ChessTile(this.id + "_b7"));
-      row.push(new ChessTile(this.id + "_c7"));
-      row.push(new ChessTile(this.id + "_d7"));
-      row.push(new ChessTile(this.id + "_e7"));
-      row.push(new ChessTile(this.id + "_f7"));
-      row.push(new ChessTile(this.id + "_g7"));
-      row.push(new ChessTile(this.id + "_h7"));
-      this.tiles.push(row);
-
-      var row = []
-      row.push(new ChessTile(this.id + "_a8"));
-      row.push(new ChessTile(this.id + "_b8"));
-      row.push(new ChessTile(this.id + "_c8"));
-      row.push(new ChessTile(this.id + "_d8"));
-      row.push(new ChessTile(this.id + "_e8"));
-      row.push(new ChessTile(this.id + "_f8"));
-      row.push(new ChessTile(this.id + "_g8"));
-      row.push(new ChessTile(this.id + "_h8"));
-      this.tiles.push(row);
+      for (var i = 1; i <= this.m; i++) {
+        var row = [];
+        for (var j = 1; j <= this.n; j++) {
+          //row.push(new ChessTile(this.getCodeFromCoords(j, i, true)));
+          row.push(new ChessTile(j, i, this));
+        }
+        this.tiles.push(row);
+      }
 
     }
 
@@ -337,26 +375,89 @@
       }
     }
 
-    movePiece(x1, y1, x2, y2) {
+    getCodeFromCoords(x, y, returnPieceCode = false) {
+      var letter = "z";
+      switch(x) {
+        case 1:
+          letter = "a";
+          break;
+        case 2:
+          letter = "b";
+          break;
+        case 3:
+          letter = "c";
+          break;
+        case 4:
+          letter = "d";
+          break;
+        case 5:
+          letter = "e";
+          break;
+        case 6:
+          letter = "f";
+          break;
+        case 7:
+          letter = "g";
+          break;
+        case 8:
+          letter = "h";
+          break;
+      }
+      if (returnPieceCode) {
+        return this.id + "_" + letter + y;
+      } else {
+        return this.id + "t_" + letter + y;
+      }
+    }
+
+    getTileFromCode(code) {
+      var x = 0;
+      switch(code.charAt(code.length - 2)) {
+        case "a":
+          x = 1;
+          break;
+        case "b":
+          x = 2;
+          break;
+        case "c":
+          x = 3;
+          break;
+        case "d":
+          x = 4;
+          break;
+        case "e":
+          x = 5;
+          break;
+        case "f":
+          x = 6;
+          break;
+        case "g":
+          x = 7;
+          break;
+        case "h":
+          x = 8;
+          break;
+      }
+      var y = code.charAt(code.length - 1);
+      return this.getTile(x, y);
+    }
+
+    isMoveValid(x1, y1, x2, y2) {
       var sourcePiece = this.getTile(x1, y1).getPiece();
       var targetPiece = this.getTile(x2, y2).getPiece();
-      var emsg = "That piece cannot move there."
 
       if (x2 > 8 || x2 < 1 || y2 > 8 || y2 < 1 || (x1 === x2 && y1 === y2)) {
-        console.log(emsg);
-        return null;
+        return false;
       }
 
       if (targetPiece !== null) {
         if (targetPiece.owner === sourcePiece.owner) {
-          console.log(emsg);
-          return null;
+          return false;
         }
       }
 
       if (sourcePiece === null) {
-        console.log("Source tile is empty.");
-        return null;
+        return false;
       }
 
       switch(sourcePiece.type) {
@@ -365,23 +466,20 @@
           if ((Math.abs(x2 - x1) === 1 && Math.abs(y2 - y1) === 2) || (Math.abs(x2 - x1) === 2 && Math.abs(y2 - y1) === 1)) {
             // good, fallthrough
           } else {
-            console.log(emsg);
-            return null;
+            return false;
           }
           break;
 
         case "♖":
         case "♜":
           if (x1 !== x2 && y1 !== y2) {
-            console.log(emsg);
-            return null;
+            return false;
           }
           if (x1 === x2) {
             for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
               var piece = this.getTile(x1, i).getPiece();
               if (piece !== null) {
-                console.log(emsg);
-                return null;
+                return false;
               }
             }
           }
@@ -389,8 +487,7 @@
             for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
               var piece = this.getTile(i, y1).getPiece();
               if (piece !== null) {
-                console.log(emsg);
-                return null;
+                return false;
               }
             }
           }
@@ -399,16 +496,14 @@
         case "♗":
         case "♝":
           if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
-            console.log(emsg);
-            return null;
+            return false;
           }
           var xsign = Math.sign(x2 - x1);
           var ysign = Math.sign(y2 - y1);
           for (var i = 1; i < Math.abs(x2 - x1); i++) {
             var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
             if (piece !== null) {
-              console.log(emsg);
-              return null;
+              return false;
             }
           }
           break;
@@ -418,16 +513,14 @@
         var firstCheckFailed = false;
         if (x1 !== x2 && y1 !== y2) {
           if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
-            console.log(emsg);
-            return null;
+            return false;
           }
           var xsign = Math.sign(x2 - x1);
           var ysign = Math.sign(y2 - y1);
           for (var i = 1; i < Math.abs(x2 - x1); i++) {
             var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
             if (piece !== null) {
-              console.log(emsg);
-              return null;
+              return false;
             }
           }
         }
@@ -435,8 +528,7 @@
           for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
             var piece = this.getTile(x1, i).getPiece();
             if (piece !== null) {
-              console.log(emsg);
-              return null;
+              return false;
             }
           }
         }
@@ -444,8 +536,7 @@
           for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
             var piece = this.getTile(i, y1).getPiece();
             if (piece !== null) {
-              console.log(emsg);
-              return null;
+              return false;
             }
           }
         }
@@ -454,8 +545,7 @@
         case "♔":
         case "♚":
           if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1) {
-            console.log(emsg);
-            return null;
+            return false;
           }
           break;
 
@@ -463,83 +553,113 @@
         case "♟":
           if (sourcePiece.owner.bottom) {
             if (y2 <= y1) {
-              console.log(emsg);
-              return null;
+              return false;
             }
             if (y2 - y1 > 1) {
               if (y2 - y1 === 2) {
                 if (y1 > 2) {
-                  console.log(emsg);
-                  return null;
+                  return false;
                 }
               } else {
-                console.log(emsg);
-                return null;
+                return false;
               }
             }
             if (x1 !== x2) {
               if (Math.abs(x2 - x1) > 1) {
-                console.log(emsg);
-                return null;
+                return false;
               }
               if (Math.abs(x2 - x1) === 1) {
                 if (targetPiece === null) {
-                  console.log(emsg);
-                  return null;
+                  return false;
                 }
               }
             } else {
               if (targetPiece !== null) {
-                console.log(emsg);
-                return null;
+                return false;
               }
               if (y2 - y1 === 2 && this.getTile(x1, y1 + 1).getPiece() !== null) {
-                console.log(emsg);
-                return null;
+                return false;
               }
             }
           } else {
             if (y2 >= y1) {
-              console.log(emsg);
-              return null;
+              return false;
             }
             if (y1 - y2 > 1) {
               if (y1 - y2 === 2) {
                 if (y1 < 7) {
-                  console.log(emsg);
-                  return null;
+                  return false;
                 }
               } else {
-                console.log(emsg);
-                return null;
+                return false;
               }
             }
             if (x1 !== x2) {
               if (Math.abs(x2 - x1) > 1) {
-                console.log(emsg);
-                return null;
+                return false;
               }
               if (Math.abs(x2 - x1) === 1) {
                 if (targetPiece === null) {
-                  console.log(emsg);
-                  return null;
+                  return false;
                 }
               }
             } else {
               if (targetPiece !== null) {
-                console.log(emsg);
-                return null;
+                return false;
               }
               if (y1 - y2 === 2 && this.getTile(x1, y1 - 1).getPiece() !== null) {
-                console.log(emsg);
-                return null;
+                return false
               }
             }
           }
           break;
+        }
 
+      return true;
+    }
+
+    isInCheck(x2, y2) {
+      for (var i = 1; i <= this.m; i++) {
+        for (var j = 1; j <= this.n; j++) {
+          var piece = this.getTile(j, i).getPiece();
+          if (piece !== null) {
+            if (piece.type === "♔" || piece.type === "♚") {
+              if (this.isMoveValid(x2, y2, j, i)) {
+                console.log(piece.owner.username + "is in check!");
+                return true;
+              } else {
+                return false;
+              }
+            }
+          }
+        }
       }
-      this.getTile(x1, y1).getPiece().moveTo(x2, y2);
+    }
+
+    movePiece(x1, y1, x2, y2) {
+      var sourcePiece = this.getTile(x1, y1).getPiece();
+      var targetPiece = this.getTile(x2, y2).getPiece();
+      var emsg = "That piece cannot move there."
+      //console.log(sourcePiece);
+      //var checkmsg = this.sourcePiece.owner.username + "has put their opponent in check!"
+
+      if (this.isMoveValid(x1, y1, x2, y2)) {
+        if (this.turn === this.getTile(x1, y1).getPiece().owner) {
+          this.getTile(x1, y1).getPiece().moveTo(x2, y2);
+          this.turn = sourcePiece.owner.opponent;
+          return true;
+        } else {
+          this.game.feedText("It is not that player's turn")
+          return false;
+        }
+
+        //if (this.isInCheck(x2, y2)) {
+        //  console.log(this.sourcePiece.owner.username + "has put their opponent in check!");
+        //}
+      } else {
+        console.log(emsg);
+        return false;
+      }
 
     }
 
@@ -547,9 +667,10 @@
 
 
   class ChessPlayer {
-    constructor(username, bottom = true, board = null) {
+    constructor(username, bottom = true, opponent = null, board = null) {
       this.username = username;
       this.bottom = bottom;
+      this.opponent = opponent;
       this.board = board;
     }
 
@@ -557,8 +678,10 @@
 
 
   class ChessTile {
-    constructor(code, piece = null) {
-      this.code = code;
+    constructor(x, y, board, piece = null) {
+      this.x = x;
+      this.y = y;
+      this.board = board;
       this.setPiece(piece);
     }
 
@@ -573,10 +696,31 @@
     setPiece(newPiece) {
       this.piece = newPiece;
       if (newPiece === null) {
-        document.getElementById(this.code).innerHTML = " ";
+        document.getElementById(this.board.getCodeFromCoords(this.x, this.y, true)).innerHTML = " ";
       } else {
-        document.getElementById(this.code).innerHTML = newPiece.type;
+        document.getElementById(this.board.getCodeFromCoords(this.x, this.y, true)).innerHTML = newPiece.type;
+        if (newPiece.owner.bottom) {
+          document.getElementById(this.board.getCodeFromCoords(this.x, this.y, true)).className = "chesspiece";
+        } else {
+          document.getElementById(this.board.getCodeFromCoords(this.x, this.y, true)).className = "chesspiecealt";
+        }
       }
+    }
+
+    tintActive() {
+      document.getElementById(this.board.getCodeFromCoords(this.x, this.y)).style.filter = "brightness(130%)";
+    }
+
+    tintHighlight() {
+      document.getElementById(this.board.getCodeFromCoords(this.x, this.y)).style.filter = "brightness(115%)";
+    }
+
+    tintShadow() {
+      document.getElementById(this.board.getCodeFromCoords(this.x, this.y)).style.filter = "brightness(85%)";
+    }
+
+    tintClear() {
+      document.getElementById(this.board.getCodeFromCoords(this.x, this.y)).style.filter = "brightness(100%)";
     }
 
   }
@@ -609,36 +753,51 @@
 
   // Testing
 
-  var p1 = new ChessPlayer("Nicky", true);
-  var p2 = new ChessPlayer("Peetzkee", false);
+  var p1 = new ChessPlayer("Player in White", true);
+  var p2 = new ChessPlayer("Player in Black", false);
+  p1.opponent = p2; p2.opponent = p1;
   var b1 = new ChessBoard("b1", p1, p2);
   var g1 = new ChessGame([b1]);
-  var activePiece = null;
 
-  function activatePiece(piece) {
-    document.getElementById(piece.tile.code).style.backgroundColor = 'green'
-  }
+  for (let i = 1; i <= 8; i++) {
+    for (let j = 1; j <= 8; j++) {
+      let curTile = document.getElementById(g1.boards[0].getCodeFromCoords(j, i));
+      curTile.addEventListener('click', event => {
+        if (event.defaultPrevented) return;
 
-  function deactivatePiece(piece) {
-    document.getElementById(piece.tile.code).style.backgroundColor = 'white'
-  }
-
-  document.getElementById("b1_a2").addEventListener('click', event => {
-    if (activePiece === null) {
-      activePiece = b1.getTile(1,2).getPiece();
-      activatePiece(activePiece);
-    } else if (activePiece === b1.getTile(1,2).getPiece()) {
-      deactivatePiece(activePiece);
-      activePiece = null;
+        if (g1.activePiece === null) {
+          g1.activatePiece(g1.boards[0].getTileFromCode(curTile.id).getPiece());
+        } else if (g1.activePiece === g1.boards[0].getTileFromCode(curTile.id).getPiece()) {
+          g1.deactivatePiece(g1.activePiece);
+        } else if (g1.boards[0].getTileFromCode(curTile.id).getPiece() !== null) {
+          if (g1.activePiece.owner === g1.boards[0].getTileFromCode(curTile.id).getPiece().owner) {
+            g1.deactivatePiece(g1.activePiece);
+            g1.activatePiece(g1.boards[0].getTileFromCode(curTile.id).getPiece());
+          } else {
+            var capturedPiece = g1.boards[0].getTileFromCode(curTile.id).getPiece();
+            var sourceTileText = g1.boards[0].getCodeFromCoords(g1.activePiece.tile.x, g1.activePiece.tile.y).slice(-2);
+            var successful = g1.boards[0].movePiece(g1.activePiece.tile.x, g1.activePiece.tile.y, g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y);
+            if (successful) {
+              var targetTileText = g1.boards[0].getCodeFromCoords(g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y).slice(-2);
+              g1.feedText(g1.activePiece.owner.username + " | " + g1.activePiece.type + " " + sourceTileText + " → " + targetTileText + " " + capturedPiece.type);
+            }
+            g1.deactivatePiece(g1.activePiece);
+          }
+        } else {
+          var sourceTileText = g1.boards[0].getCodeFromCoords(g1.activePiece.tile.x, g1.activePiece.tile.y).slice(-2);
+          var successful = g1.boards[0].movePiece(g1.activePiece.tile.x, g1.activePiece.tile.y, g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y);
+          if (successful) {
+            var targetTileText = g1.boards[0].getCodeFromCoords(g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y).slice(-2);
+            g1.feedText(g1.activePiece.owner.username + " | " + g1.activePiece.type + " " + sourceTileText + " → " + targetTileText);
+          }
+          g1.deactivatePiece(g1.activePiece);
+        }
+        console.log(g1.activePiece);
+      });
     }
-    console.log(activePiece);
-  });
-  document.getElementById("b1_a4").addEventListener('click', event => {
-    activePiece = b1.getTile(1,2).getPiece();
-    console.log(activePiece);
-  });
+  }
 
 </script>
 
 <br><h2>Rules</h2>
-<p>You and your ally take turns at the same time, but you cannot talk freely. In fact, while you can fully see your board, you can only see your ally's pieces on their board; your ally's opponent's pieces are hidden. You have only two ways of communicating with your ally: a "Request aid" button, and a "Sending aid" button, either of which can be pressed before your turn begins. During your turn, you can choose to teleport any number of your pieces that are adjacent to your king onto your ally's board, and your ally must place them adjacent to their king after their turn. This counts as your turn.</p>
+<p>Lorem ipsum</p>
