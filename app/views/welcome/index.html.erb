@@ -67,10 +67,55 @@
     border-style:solid;
     border-width: 1pt 1pt 1pt 1pt;
   }
+
+  .alertbox {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .alertcontent {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 200pt; /* Could be more or less, depending on screen size */
+  }
+
+  .alertbutton {
+    background-color: lightgrey;
+  }
+
 </style>
 
 <h1>Portal Chess</h1>
 <h4>A 2v2 chess variant with [special rules]</h4><br>
+
+<button id="promotebutton">Promote Pawn</button>
+
+
+<div id="promotebox" class="alertbox">
+
+
+  <div class="alertcontent">
+    <p id="promotetext" style="font-size:150%;">Promote your pawn:</p><br>
+    <button id="prook" class="chesspiece alertbutton">♜</button>
+    <button id="pknight" class="chesspiece alertbutton">♞</button>
+    <button id="pbishop" class="chesspiece alertbutton">♝</button>
+    <button id="pqueen" class="chesspiece alertbutton">♛</button>
+    <br><br>
+    <button id="pconfirm">Confirm</button>
+  </div>
+
+</div>
+
 
 <div id="textfeed" class="textbox">
 
@@ -258,6 +303,7 @@
       this.boards = boards;
       this.activePiece = null;
       this.textfeed = document.getElementById("textfeed");
+      this.gameOver = false;
 
       for (var i = 0; i < this.boards.length; i++) {
         this.boards[i].game = this;
@@ -305,7 +351,7 @@
         for (var j = 1; j <= piece.tile.board.n; j++) {
           var testTile = piece.tile.board.getTile(j, i);
           if (i !== piece.tile.y || j !== piece.tile.x) {
-            if (piece.tile.board.isMoveValid(piece.tile.x, piece.tile.y, testTile.x, testTile.y)) {
+            if (piece.tile.board.isMoveValid(piece.tile.x, piece.tile.y, testTile.x, testTile.y)[0]) {
               testTile.tintHighlight();
             } else {
               testTile.tintShadow();
@@ -442,22 +488,22 @@
       return this.getTile(x, y);
     }
 
-    isMoveValid(x1, y1, x2, y2) {
+    isMoveValid(x1, y1, x2, y2) { // return [is valid, sourcepiece, targetpiece, check prevented move, special move type]
       var sourcePiece = this.getTile(x1, y1).getPiece();
       var targetPiece = this.getTile(x2, y2).getPiece();
 
       if (x2 > 8 || x2 < 1 || y2 > 8 || y2 < 1 || (x1 === x2 && y1 === y2)) {
-        return false;
+        return [false, sourcePiece, targetPiece, false, false];
       }
 
       if (targetPiece !== null) {
         if (targetPiece.owner === sourcePiece.owner) {
-          return false;
+          return [false, sourcePiece, targetPiece, false, false];
         }
       }
 
       if (sourcePiece === null) {
-        return false;
+        return [false, sourcePiece, targetPiece, false, false];
       }
 
       switch(sourcePiece.type) {
@@ -466,20 +512,20 @@
           if ((Math.abs(x2 - x1) === 1 && Math.abs(y2 - y1) === 2) || (Math.abs(x2 - x1) === 2 && Math.abs(y2 - y1) === 1)) {
             // good, fallthrough
           } else {
-            return false;
+            return [false, sourcePiece, targetPiece, false, false];
           }
           break;
 
         case "♖":
         case "♜":
           if (x1 !== x2 && y1 !== y2) {
-            return false;
+            return [false, sourcePiece, targetPiece, false, false];
           }
           if (x1 === x2) {
             for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
               var piece = this.getTile(x1, i).getPiece();
               if (piece !== null) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
           }
@@ -487,7 +533,7 @@
             for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
               var piece = this.getTile(i, y1).getPiece();
               if (piece !== null) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
           }
@@ -496,14 +542,14 @@
         case "♗":
         case "♝":
           if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
-            return false;
+            return [false, sourcePiece, targetPiece, false, false];
           }
           var xsign = Math.sign(x2 - x1);
           var ysign = Math.sign(y2 - y1);
           for (var i = 1; i < Math.abs(x2 - x1); i++) {
             var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
             if (piece !== null) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
           }
           break;
@@ -513,14 +559,14 @@
         var firstCheckFailed = false;
         if (x1 !== x2 && y1 !== y2) {
           if (Math.abs(x2 - x1) !== Math.abs(y2 - y1)) {
-            return false;
+            return [false, sourcePiece, targetPiece, false, false];
           }
           var xsign = Math.sign(x2 - x1);
           var ysign = Math.sign(y2 - y1);
           for (var i = 1; i < Math.abs(x2 - x1); i++) {
             var piece = this.getTile(x1 + (i * xsign), y1 + (i * ysign)).getPiece();
             if (piece !== null) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
           }
         }
@@ -528,7 +574,7 @@
           for (var i = Math.min(y1, y2) + 1; i < Math.max(y1, y2); i++) {
             var piece = this.getTile(x1, i).getPiece();
             if (piece !== null) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
           }
         }
@@ -536,7 +582,7 @@
           for (var i = Math.min(x1, x2) + 1; i < Math.max(x1, x2); i++) {
             var piece = this.getTile(i, y1).getPiece();
             if (piece !== null) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
           }
         }
@@ -544,121 +590,332 @@
 
         case "♔":
         case "♚":
+          // left castling check
+          if (!sourcePiece.hasMoved && x2 === 3 && y2 === y1) {
+            var possibleRook = this.getTile(1, y1).getPiece();
+            if (possibleRook !== null) {
+              if ((possibleRook.type === "♖" || possibleRook.type === "♜")
+              && !possibleRook.hasMoved && this.getTile(2, y1).getPiece() === null
+              && this.getTile(3, y1).getPiece() === null && this.getTile(4, y1).getPiece() === null) {
+
+                var canLeftCastle = true;
+                for (var i = 1; i <= this.m; i++) {
+                  for (var j = 1; j <= this.n; j++) {
+                    var attacker = this.getTile(j, i).getPiece();
+                    if (attacker !== null) {
+                      if (attacker.owner === sourcePiece.owner.opponent
+                      && (this.isMoveValid(j, i, x1, y1)[0] || this.isMoveValid(j, i, 4, y1)[0]
+                      || this.isMoveValid(j, i, 3, y1)[0])) {
+                        canCastle = false;
+                      }
+                    }
+                  }
+                }
+
+                if (canLeftCastle) {
+                  return [true, sourcePiece, targetPiece, false, "lcastle"];
+                }
+              }
+            }
+          }
+
+          // right castling check
+          if (!sourcePiece.hasMoved && x2 === 7 && y2 === y1) {
+            var possibleRook = this.getTile(8, y1).getPiece();
+            if (possibleRook !== null) {
+              if ((possibleRook.type === "♖" || possibleRook.type === "♜")
+              && !possibleRook.hasMoved && this.getTile(6, y1).getPiece() === null
+              && this.getTile(7, y1).getPiece() === null) {
+
+                var canRightCastle = true;
+                for (var i = 1; i <= this.m; i++) {
+                  for (var j = 1; j <= this.n; j++) {
+                    var attacker = this.getTile(j, i).getPiece();
+                    if (attacker !== null) {
+                      if (attacker.owner === sourcePiece.owner.opponent
+                      && (this.isMoveValid(j, i, x1, y1)[0] || this.isMoveValid(j, i, 6, y1)[0]
+                      || this.isMoveValid(j, i, 7, y1)[0])) {
+                        canRightCastle = false;
+                      }
+                    }
+                  }
+                }
+
+                if (canRightCastle) {
+                  return [true, sourcePiece, targetPiece, false, "rcastle"];
+                }
+              }
+            }
+          }
+
           if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1) {
-            return false;
+            return [false, sourcePiece, targetPiece, false, false];
           }
           break;
 
         case "♙":
         case "♟":
+          // en passant check
+
+          if (x1 + 1 <= this.n && targetPiece === null) {
+            var curPiece = this.getTile(x1 + 1, y1).getPiece();
+            if (curPiece !== null) {
+              if (curPiece.owner !== sourcePiece.owner && (curPiece.type === "♙" || curPiece.type === "♟") && curPiece.enPassantPossible) {
+                if (sourcePiece.owner.bottom && x2 === x1 + 1 && y2 === y1 + 1) {
+                  if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner)) {
+                    return [false, sourcePiece, targetPiece, true, false]
+                  } else {
+                    return [true, sourcePiece, curPiece, false, "enpassant"];
+                  }
+
+                }
+                if (!sourcePiece.owner.bottom && x2 === x1 + 1 && y2 === y1 - 1) {
+                  if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner)) {
+                    return [false, sourcePiece, targetPiece, true, false]
+                  } else {
+                    return [true, sourcePiece, curPiece, false, "enpassant"];
+                  }
+                }
+              }
+            }
+          }
+
+          if (x1 - 1 > 1 && targetPiece === null) {
+            var curPiece = this.getTile(x1 - 1, y1).getPiece();
+            if (curPiece !== null) {
+              if (curPiece.owner !== sourcePiece.owner && (curPiece.type === "♙" || curPiece.type === "♟") && curPiece.enPassantPossible) {
+                if (sourcePiece.owner.bottom && x2 === x1 - 1 && y2 === y1 + 1) {
+                  if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner)) {
+                    return [false, sourcePiece, targetPiece, true, false]
+                  } else {
+                    return [true, sourcePiece, curPiece, false, "enpassant"];
+                  }
+                }
+                if (!sourcePiece.owner.bottom && x2 === x1 - 1 && y2 === y1 - 1) {
+                  if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner)) {
+                    return [false, sourcePiece, targetPiece, true, false]
+                  } else {
+                    return [true, sourcePiece, curPiece, false, "enpassant"];
+                  }
+                }
+              }
+            }
+          }
+
+          // otherwise
           if (sourcePiece.owner.bottom) {
             if (y2 <= y1) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
             if (y2 - y1 > 1) {
               if (y2 - y1 === 2) {
-                if (y1 > 2) {
-                  return false;
+                if (y1 > 2 || x1 !== x2) {
+                  return [false, sourcePiece, targetPiece, false, false];
                 }
               } else {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
             if (x1 !== x2) {
               if (Math.abs(x2 - x1) > 1) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
               if (Math.abs(x2 - x1) === 1) {
                 if (targetPiece === null) {
-                  return false;
+                  return [false, sourcePiece, targetPiece, false, false];
                 }
               }
             } else {
               if (targetPiece !== null) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
               if (y2 - y1 === 2 && this.getTile(x1, y1 + 1).getPiece() !== null) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
           } else {
             if (y2 >= y1) {
-              return false;
+              return [false, sourcePiece, targetPiece, false, false];
             }
             if (y1 - y2 > 1) {
               if (y1 - y2 === 2) {
-                if (y1 < 7) {
-                  return false;
+                if (y1 < 7 || x1 !== x2) {
+                  return [false, sourcePiece, targetPiece, false, false];
                 }
               } else {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
             if (x1 !== x2) {
               if (Math.abs(x2 - x1) > 1) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
               if (Math.abs(x2 - x1) === 1) {
                 if (targetPiece === null) {
-                  return false;
+                  return [false, sourcePiece, targetPiece, false, false];
                 }
               }
             } else {
               if (targetPiece !== null) {
-                return false;
+                return [false, sourcePiece, targetPiece, false, false];
               }
               if (y1 - y2 === 2 && this.getTile(x1, y1 - 1).getPiece() !== null) {
-                return false
+                return [false, sourcePiece, targetPiece, false, false];
               }
             }
           }
           break;
         }
-
-      return true;
+      if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner)) {
+        return [false, sourcePiece, targetPiece, true, false]
+      } else {
+        return [true, sourcePiece, targetPiece, false, false];
+      }
     }
 
-    isInCheck(x2, y2) {
+    isInCheck(piece, x2, y2, player) { // if piece moves to tile x2, y2, is player in check?
+      var targetTileOriginalPiece = this.getTile(x2, y2).getPiece();
+      if (targetTileOriginalPiece !== null) targetTileOriginalPiece.tile = null;
+      var x1 = piece.tile.x;
+      var y1 = piece.tile.y;
+      var sourceEnPassantPossible = piece.enPassantPossible;
+
+      piece.tile = this.getTile(x2, y2);
+      this.getTile(x2, y2).piece = piece;
+      this.getTile(x1, y1).piece = null;
+      if (piece.type === "♟" && Math.abs(y2 - y1) > 1) {
+        piece.enPassantPossible = true;
+      }
+      var result = false;
+
       for (var i = 1; i <= this.m; i++) {
         for (var j = 1; j <= this.n; j++) {
-          var piece = this.getTile(j, i).getPiece();
-          if (piece !== null) {
-            if (piece.type === "♔" || piece.type === "♚") {
-              if (this.isMoveValid(x2, y2, j, i)) {
-                console.log(piece.owner.username + "is in check!");
-                return true;
-              } else {
-                return false;
+          var king = this.getTile(j, i).getPiece();
+          if (king !== null) {
+            if ((king.type === "♔" || king.type === "♚") && king.owner === player) {
+              for (var i2 = 1; i2 <= this.m; i2++) {
+                for (var j2 = 1; j2 <= this.n; j2++) {
+                  var testPiece = this.getTile(j2, i2).getPiece();
+                  if (testPiece !== null) {
+                    if (testPiece.owner === player.opponent) {
+                      if (this.isMoveValid(testPiece.tile.x, testPiece.tile.y, king.tile.x, king.tile.y)[0]) {
+                        result = true;
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
+      this.getTile(x1, y1).piece = piece;
+      this.getTile(x2, y2).piece = targetTileOriginalPiece;
+      if (targetTileOriginalPiece !== null) targetTileOriginalPiece.tile = this.getTile(x2, y2);
+      piece.tile = this.getTile(x1, y1);
+      piece.enPassantPossible = sourceEnPassantPossible;
+
+      return result;
     }
 
     movePiece(x1, y1, x2, y2) {
-      var sourcePiece = this.getTile(x1, y1).getPiece();
-      var targetPiece = this.getTile(x2, y2).getPiece();
-      var emsg = "That piece cannot move there."
-      //console.log(sourcePiece);
-      //var checkmsg = this.sourcePiece.owner.username + "has put their opponent in check!"
+      var validCheck = this.isMoveValid(x1, y1, x2, y2);
+      var isValid = validCheck[0]
+      var sourcePiece = validCheck[1];
+      var targetPiece = validCheck[2];
+      var checkPrevented = validCheck[3];
+      var specialType = validCheck[4];
 
-      if (this.isMoveValid(x1, y1, x2, y2)) {
-        if (this.turn === this.getTile(x1, y1).getPiece().owner) {
-          this.getTile(x1, y1).getPiece().moveTo(x2, y2);
-          this.turn = sourcePiece.owner.opponent;
-          return true;
-        } else {
-          this.game.feedText("It is not that player's turn")
-          return false;
+      if (isValid) {
+        if (this.isInCheck(sourcePiece, x2, y2, sourcePiece.owner.opponent)) {
+          sourcePiece.owner.opponent.check = true;
+
+
+
         }
+        if (this.turn === sourcePiece.owner) {
+          if (targetPiece !== null) {
+            targetPiece.tile.setPiece(null);
+          }
+          sourcePiece.moveTo(x2, y2);
+          if (specialType === "lcastle") {
+            var rook = this.getTile(1, y1).getPiece()
+            rook.moveTo(4, y1);
+            rook.hasMoved = true;
+          }
+          if (specialType === "rcastle") {
+            var rook = this.getTile(8, y1).getPiece()
+            rook.moveTo(6, y1);
+            rook.hasMoved = true;
+          }
+          sourcePiece.hasMoved = true;
+          if (sourcePiece.owner.opponent.check) {
+            var hasValidMoves = false;
+            for (var i = 1; i <= this.m; i++) {
+              for (var j = 1; j <= this.n; j++) {
+                var pieceToTry = this.getTile(j, i).getPiece();
+                if (pieceToTry !== null) {
+                  if (pieceToTry.owner === sourcePiece.owner.opponent) {
+                    for (var i2 = 1; i2 <= this.m; i2++) {
+                      for (var j2 = 1; j2 <= this.n; j2++) {
+                        if (this.isMoveValid(j, i, j2, i2)[0]) {
+                          hasValidMoves = true;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
 
-        //if (this.isInCheck(x2, y2)) {
-        //  console.log(this.sourcePiece.owner.username + "has put their opponent in check!");
-        //}
+            if (!hasValidMoves) {
+              this.game.gameOver = true;
+              var that = this;
+              setTimeout(function () {
+                that.game.feedText(sourcePiece.owner.opponent.username + " has been checkmated!");
+                that.game.feedText(sourcePiece.owner.username + " is victorious!");
+              }, 100);
+            } else {
+              var that = this;
+              setTimeout(function () {
+                that.game.feedText(sourcePiece.owner.opponent.username + " is in check!");
+              }, 100);
+            }
+          }
+
+          for (var i = 1; i <= this.m; i++) {
+            for (var j = 1; j <= this.n; j++) {
+              var curPiece = this.getTile(j, i).getPiece();
+              if (curPiece !== null) {
+                if (curPiece.owner === sourcePiece.owner) {
+                  curPiece.enPassantPossible = false;
+                }
+              }
+            }
+          }
+          if ((sourcePiece.type === "♟" || sourcePiece.type === "♙")) {
+            if (Math.abs(y2 - y1) > 1) {
+              sourcePiece.enPassantPossible = true;
+            }
+            if ((sourcePiece.owner.bottom && sourcePiece.tile.y === 8) || (!sourcePiece.owner.bottom && sourcePiece.tile.y === 1)) {
+              specialType = "promote"
+              promotionPiece = sourcePiece;
+              promoteText.innerHTML = "Promote " + sourcePiece.owner.username + "\'s pawn (" + this.getCodeFromCoords(x2, y2).slice(-2) + ")";
+              promoteBox.style.display = "block";
+              promotionSelected = "♛";
+              highlightAlertButton(pQueen);
+              this.turn = sourcePiece.owner.opponent;
+              return [true, specialType];
+            }
+          }
+          this.turn = sourcePiece.owner.opponent;
+          return [true, specialType];
+        } else {
+          this.game.feedText("It is " + sourcePiece.owner.opponent.username + "\'s turn");
+          return [false, specialType];
+        }
       } else {
-        console.log(emsg);
-        return false;
+        return [false, specialType];
       }
 
     }
@@ -667,11 +924,12 @@
 
 
   class ChessPlayer {
-    constructor(username, bottom = true, opponent = null, board = null) {
+    constructor(username, bottom = true, opponent = null, board = null, check = false) {
       this.username = username;
       this.bottom = bottom;
       this.opponent = opponent;
       this.board = board;
+      this.check = false;
     }
 
   }
@@ -683,6 +941,7 @@
       this.y = y;
       this.board = board;
       this.setPiece(piece);
+      this.undoPiece = null;
     }
 
     isEmpty() {
@@ -727,10 +986,12 @@
 
 
   class ChessPiece {
-    constructor(type, owner, tile) {
+    constructor(type, owner, tile, enPassantPossible = false, hasMoved = false) {
       this.type = type; // use the unicode symbol
       this.owner = owner;
       this.tile = tile;
+      this.enPassantPossible = false;
+      this.hasMoved = hasMoved;
 
       this.owner.board.addPiece(this);
     }
@@ -745,16 +1006,76 @@
       newTile.setPiece(this);
       this.tile = newTile;
       this.owner = newOwner;
+
       // if used without optional arg, should be normal chessboard movement
     }
 
   }
 
+  // End of classes
+
+
+  var promoteBox = document.getElementById("promotebox");
+  var promoteButton = document.getElementById("promotebutton");
+  var promoteText = document.getElementById("promotetext");
+  var pRook = document.getElementById("prook");
+  var pKnight = document.getElementById("pknight");
+  var pBishop = document.getElementById("pbishop");
+  var pQueen = document.getElementById("pqueen");
+  var confirmButton = document.getElementById("pconfirm");
+  var promotionPiece = null;
+  var promotionSelected = "♛";
+  var promoteConfirmed = false;
+
+  promoteButton.onclick = function() {
+    promoteBox.style.display = "block";
+    promotionSelected = "♛";
+    highlightAlertButton(pQueen);
+    promoteConfirmed = false;
+    console.log("continue");
+  }
+
+  function highlightAlertButton(button) {
+    pRook.style.background = "lightgrey";
+    pKnight.style.background = "lightgrey";
+    pBishop.style.background = "lightgrey";
+    pQueen.style.background = "lightgrey";
+
+    button.style.background = "yellow"
+  }
+
+  pRook.onclick = function() {
+    promotionSelected = "♜";
+    highlightAlertButton(pRook);
+  }
+
+  pKnight.onclick = function() {
+    promotionSelected = "♞";
+    highlightAlertButton(pKnight);
+  }
+
+  pBishop.onclick = function() {
+    promotionSelected = "♝";
+    highlightAlertButton(pBishop);
+  }
+
+  pQueen.onclick = function() {
+    promotionSelected = "♛";
+    highlightAlertButton(pQueen);
+  }
+
+  confirmButton.onclick = function() {
+    promoteBox.style.display = "none";
+    promoteConfirmed = true;
+    promotionPiece.type = promotionSelected;
+    promotionPiece.tile.setPiece(promotionPiece); // to update visual
+  }
+
 
   // Testing
 
-  var p1 = new ChessPlayer("Player in White", true);
-  var p2 = new ChessPlayer("Player in Black", false);
+  var p1 = new ChessPlayer("White", true);
+  var p2 = new ChessPlayer("Black", false);
   p1.opponent = p2; p2.opponent = p1;
   var b1 = new ChessBoard("b1", p1, p2);
   var g1 = new ChessGame([b1]);
@@ -764,6 +1085,7 @@
       let curTile = document.getElementById(g1.boards[0].getCodeFromCoords(j, i));
       curTile.addEventListener('click', event => {
         if (event.defaultPrevented) return;
+        if (g1.gameOver) return;
 
         if (g1.activePiece === null) {
           g1.activatePiece(g1.boards[0].getTileFromCode(curTile.id).getPiece());
@@ -777,8 +1099,20 @@
             var capturedPiece = g1.boards[0].getTileFromCode(curTile.id).getPiece();
             var sourceTileText = g1.boards[0].getCodeFromCoords(g1.activePiece.tile.x, g1.activePiece.tile.y).slice(-2);
             var successful = g1.boards[0].movePiece(g1.activePiece.tile.x, g1.activePiece.tile.y, g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y);
-            if (successful) {
+            if (successful[0]) {
               var targetTileText = g1.boards[0].getCodeFromCoords(g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y).slice(-2);
+              if (successful[1] === "enpassant") { // was en passant
+                targetTileText += " ♟ (en passant)";
+              }
+              if (successful[1] === "lcastle") {
+                targetTileText += " (left castle)";
+              }
+              if (successful[1] === "rcastle") {
+                targetTileText += " (right castle)";
+              }
+              if (successful[1] === "promote") {
+                targetTileText += " (promotion)";
+              }
               g1.feedText(g1.activePiece.owner.username + " | " + g1.activePiece.type + " " + sourceTileText + " → " + targetTileText + " " + capturedPiece.type);
             }
             g1.deactivatePiece(g1.activePiece);
@@ -786,13 +1120,24 @@
         } else {
           var sourceTileText = g1.boards[0].getCodeFromCoords(g1.activePiece.tile.x, g1.activePiece.tile.y).slice(-2);
           var successful = g1.boards[0].movePiece(g1.activePiece.tile.x, g1.activePiece.tile.y, g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y);
-          if (successful) {
+          if (successful[0]) {
             var targetTileText = g1.boards[0].getCodeFromCoords(g1.boards[0].getTileFromCode(curTile.id).x, g1.boards[0].getTileFromCode(curTile.id).y).slice(-2);
+            if (successful[1] === "enpassant") { // was en passant
+              targetTileText += " ♟ (en passant)"
+            }
+            if (successful[1] === "lcastle") { // was en passant
+              targetTileText += " (left castle)"
+            }
+            if (successful[1] === "rcastle") { // was en passant
+              targetTileText += " (right castle)"
+            }
+            if (successful[1] === "promote") {
+              targetTileText += " (promotion)";
+            }
             g1.feedText(g1.activePiece.owner.username + " | " + g1.activePiece.type + " " + sourceTileText + " → " + targetTileText);
           }
           g1.deactivatePiece(g1.activePiece);
         }
-        console.log(g1.activePiece);
       });
     }
   }
